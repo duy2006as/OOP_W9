@@ -23,15 +23,25 @@ class Program
             Console.WriteLine("       Sinh vien: Hoang Dinh Duy   -   Ma sinh vien: 202418887");
             Console.WriteLine("================================================================================");
             Console.ResetColor();
-            Console.WriteLine(" 1. Kiem tra Factory tao thiet bi T1 va T2");
-            Console.WriteLine(" 2. Kiem tra Singleton cau hinh nha T3");
-            Console.WriteLine(" 3. Kiem tra Facade kich ban di lam GoToWork T4");
-            Console.WriteLine(" 4. Kiem tra Facade kich ban di ngu GoToSleep T5");
-            Console.WriteLine(" 5. Kiem tra cap nhat cau hinh va chuoi hoa thuong T6");
-            Console.WriteLine(" 6. Dieu khien rieng le tung thiet bi");
+
+            Console.WriteLine(" KIEM THU 3 DESIGN PATTERN");
+            Console.WriteLine(" 1. Kiem thu Factory Pattern");
+            Console.WriteLine(" 2. Kiem thu Singleton Pattern");
+            Console.WriteLine(" 3. Kiem thu Facade Pattern");
+            Console.WriteLine();
+            Console.WriteLine(" KIEM THU CHI TIET CAC TINH HUONG TU T1 DEN T6");
+            Console.WriteLine(" 4. Kiem thu T1: Tao light fan door bang Factory");
+            Console.WriteLine(" 5. Kiem thu T2: Tao thiet bi chua ho tro phat sinh ArgumentException");
+            Console.WriteLine(" 6. Kiem thu T3: Lay hai the hien HomeConfiguration duy nhat");
+            Console.WriteLine(" 7. Kiem thu T4: Kich ban di lam GoToWork");
+            Console.WriteLine(" 8. Kiem thu T5: Kich ban di ngu GoToSleep");
+            Console.WriteLine(" 9. Kiem thu T6: Cap nhat cau hinh va chuoi ky tu hoa thuong");
+            Console.WriteLine();
+            Console.WriteLine(" THAO TAC KHAC");
+            Console.WriteLine(" 10. Dieu khien rieng le tung thiet bi");
             Console.WriteLine(" 0. Thoat chuong trinh");
             Console.WriteLine("================================================================================");
-            Console.Write("Vui long chon chuc nang tu 0 den 6: ");
+            Console.Write("Vui long chon chuc nang tu 0 den 10: ");
 
             string? choice = Console.ReadLine()?.Trim();
             Console.WriteLine();
@@ -39,27 +49,43 @@ class Program
             switch (choice)
             {
                 case "1":
-                    InteractiveFactoryTest();
+                    TestFactoryPattern();
                     WaitForKey();
                     break;
                 case "2":
-                    InteractiveSingletonTest();
+                    TestSingletonPattern();
                     WaitForKey();
                     break;
                 case "3":
-                    InteractiveGoToWorkTest();
+                    TestFacadePattern();
                     WaitForKey();
                     break;
                 case "4":
-                    InteractiveGoToSleepTest();
+                    TestScenarioT1();
                     WaitForKey();
                     break;
                 case "5":
-                    InteractiveT6Test();
+                    TestScenarioT2();
                     WaitForKey();
                     break;
                 case "6":
-                    InteractiveIndividualControl();
+                    TestScenarioT3();
+                    WaitForKey();
+                    break;
+                case "7":
+                    TestScenarioT4();
+                    WaitForKey();
+                    break;
+                case "8":
+                    TestScenarioT5();
+                    WaitForKey();
+                    break;
+                case "9":
+                    TestScenarioT6();
+                    WaitForKey();
+                    break;
+                case "10":
+                    TestIndividualControl();
                     WaitForKey();
                     break;
                 case "0":
@@ -69,7 +95,7 @@ class Program
                     return;
                 default:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Lua chon khong hop le, vui long nhap lai tu 0 den 6.");
+                    Console.WriteLine("Lua chon khong hop le, vui long nhap lai so tu 0 den 10.");
                     Console.ResetColor();
                     WaitForKey();
                     break;
@@ -77,142 +103,267 @@ class Program
         }
     }
 
-    private static void InteractiveFactoryTest()
+    private static void TestFactoryPattern()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("--- KIEM TRA FACTORY TAO THIET BI T1 VA T2 ---");
+        Console.WriteLine("--- KIEM THU FACTORY PATTERN ---");
         Console.ResetColor();
-        Console.WriteLine("Ban co the nhap loai ho tro nhu light, fan, door de thu T1");
-        Console.WriteLine("Hoac nhap loai chua ho tro nhu camera, robot, tivi de thu T2");
-        Console.WriteLine();
+        Console.WriteLine("Moi ban tu nhap loai thiet bi vi du light hoac fan hoac door:");
+        Console.Write("Loai thiet bi: ");
+        string type = Console.ReadLine() ?? "light";
+        if (string.IsNullOrWhiteSpace(type)) type = "light";
 
-        Console.Write("Nhap loai thiet bi muon tao: ");
-        string type = Console.ReadLine() ?? string.Empty;
+        Console.Write("Ten thiet bi: ");
+        string name = Console.ReadLine() ?? "Thiet bi phong khach";
+        if (string.IsNullOrWhiteSpace(name)) name = "Thiet bi phong khach";
 
-        Console.Write("Nhap ten thiet bi: ");
-        string name = Console.ReadLine() ?? "Thiet bi mau";
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            name = "Thiet bi mau";
-        }
-
-        Console.WriteLine("\nDang goi phuong thuc Create cua DeviceFactory...");
-
+        Console.WriteLine("\nDang goi DeviceFactory.Create...");
         try
         {
             IDevice device = DeviceFactory.Create(type, name);
-
-            if (device == null)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Factory tra ve null doi voi loai thiet bi nay.");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Ket qua T1: Thanh cong vi da tao duoc thiet bi " + device.Name + " voi kieu cu the la " + device.GetType().Name);
-                Console.ResetColor();
-
-                Console.WriteLine("\nThuc hien kiem tra bat tat thiet bi:");
-                device.TurnOn();
-                device.TurnOff();
-
-                if (device is ILockable lockable)
-                {
-                    Console.WriteLine("Thiet bi nay co ho tro tinh nang khoa:");
-                    lockable.Lock();
-                    lockable.Unlock();
-                }
-            }
-        }
-        catch (ArgumentException ex)
-        {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Ket qua T2: Bat dung ngoai le ArgumentException hop le theo yeu cau: " + ex.Message);
+            Console.WriteLine("Ket qua: Factory tao thanh cong thiet bi " + device.Name + " voi kieu la " + device.GetType().Name);
             Console.ResetColor();
+
+            Console.WriteLine("\nThao tac thu voi thiet bi vua tao:");
+            device.TurnOn();
+            device.TurnOff();
+
+            if (device is ILockable lockable)
+            {
+                Console.WriteLine("Thiet bi co them giao dien ILockable:");
+                lockable.Lock();
+                lockable.Unlock();
+            }
         }
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ngoai le khong mong doi: " + ex.Message);
+            Console.WriteLine("Thong bao tu Factory: " + ex.Message);
             Console.ResetColor();
         }
     }
 
-    private static void InteractiveSingletonTest()
+    private static void TestSingletonPattern()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("--- KIEM TRA SINGLETON CAU HINH NHA T3 ---");
+        Console.WriteLine("--- KIEM THU SINGLETON PATTERN ---");
         Console.ResetColor();
 
-        Console.WriteLine("Lay the hien thu nhat: var c1 = HomeConfiguration.Instance;");
-        var c1 = HomeConfiguration.Instance;
-        Console.WriteLine("Gia tri cau hinh hien tai qua bien c1: HomeName = " + c1.HomeName + ", NightLightLevel = " + c1.NightLightLevel);
+        var config1 = HomeConfiguration.Instance;
+        Console.WriteLine("Gia tri hien tai qua the hien thu nhat:");
+        Console.WriteLine("HomeName: " + config1.HomeName);
+        Console.WriteLine("NightLightLevel: " + config1.NightLightLevel);
 
-        Console.WriteLine("\nTu nhap gia tri moi de kiem tra cap nhat qua bien c1:");
+        Console.WriteLine("\nMoi ban tu nhap thong tin moi de cap nhat qua the hien thu nhat:");
         Console.Write("Nhap ten nha moi: ");
         string? newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))
         {
-            c1.HomeName = newName;
+            config1.HomeName = newName;
         }
 
         Console.Write("Nhap muc sang ban dem moi tu 1 den 100: ");
         if (int.TryParse(Console.ReadLine(), out int newLevel))
         {
-            c1.NightLightLevel = newLevel;
+            config1.NightLightLevel = newLevel;
         }
 
-        Console.WriteLine("\nLay the hien thu hai: var c2 = HomeConfiguration.Instance;");
-        var c2 = HomeConfiguration.Instance;
+        Console.WriteLine("\nLay the hien thu hai qua bien config2:");
+        var config2 = HomeConfiguration.Instance;
+        Console.WriteLine("HomeName doc tu config2: " + config2.HomeName);
+        Console.WriteLine("NightLightLevel doc tu config2: " + config2.NightLightLevel);
 
-        Console.WriteLine("Gia tri doc duoc qua bien c2: HomeName = " + c2.HomeName + ", NightLightLevel = " + c2.NightLightLevel);
-        Console.WriteLine("Thuc hien kiem tra ReferenceEquals giua c1 va c2...");
-
-        bool isSame = ReferenceEquals(c1, c2);
-
-        if (isSame)
+        Console.WriteLine("\nKiem tra ReferenceEquals giua config1 va config2...");
+        if (ReferenceEquals(config1, config2))
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Ket qua T3: ReferenceEquals bang true, ca hai bien cung tro den mot the hien duy nhat trong bo nho.");
+            Console.WriteLine("Ket qua: ReferenceEquals bang true, ca hai bien cung tro den mot the hien duy nhat trong bo nho.");
+            Console.WriteLine("Du lieu duoc chia se dong bo va nhat quan tren toan bo ung dung.");
             Console.ResetColor();
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ket qua T3: ReferenceEquals bang false, hai bien tro den hai the hien khac nhau.");
+            Console.WriteLine("Ket qua: ReferenceEquals bang false, hai the hien khac nhau.");
             Console.ResetColor();
         }
     }
 
-    private static void InteractiveGoToWorkTest()
+    private static void TestFacadePattern()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("--- KIEM TRA FACADE KICH BAN DI LAM GOTOWORK T4 ---");
+        Console.WriteLine("--- KIEM THU FACADE PATTERN ---");
         Console.ResetColor();
 
-        Console.Write("Nhap ten den phong khach hoac nhan Enter de dung mac dinh: ");
+        Console.Write("Nhap ten den cho he thong: ");
         string? lightName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(lightName)) lightName = "Den phong khach";
+        if (string.IsNullOrWhiteSpace(lightName)) lightName = "Den tong hop";
 
-        Console.Write("Nhap ten quat hoac nhan Enter de dung mac dinh: ");
+        Console.Write("Nhap ten quat cho he thong: ");
         string? fanName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(fanName)) fanName = "Quat thong gio";
+        if (string.IsNullOrWhiteSpace(fanName)) fanName = "Quat tong hop";
 
-        Console.Write("Nhap ten cua chinh hoac nhan Enter de dung mac dinh: ");
+        Console.Write("Nhap ten cua cho he thong: ");
         string? doorName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(doorName)) doorName = "Cua chinh";
+        if (string.IsNullOrWhiteSpace(doorName)) doorName = "Cua tong hop";
 
         var light = new SmartLight(lightName);
         var fan = new SmartFan(fanName);
         var door = new SmartDoor(doorName);
+        var facade = new SmartHomeFacade(light, fan, door);
+
+        Console.WriteLine("\nMoi ban tu chon thao tac Facade muon kiem tra:");
+        Console.WriteLine("1. Kich hoat kịch ban di lam GoToWork");
+        Console.WriteLine("2. Kich hoat kịch ban di ngu GoToSleep");
+        Console.Write("Nhap lua chon: ");
+        string? sub = Console.ReadLine()?.Trim();
+        Console.WriteLine();
+
+        if (sub == "1")
+        {
+            Console.WriteLine("Thuc hien facade.GoToWork...");
+            facade.GoToWork();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Facade da dieu phoi tat den, tat quat va khoa cua trong mot thao tac don gian.");
+            Console.ResetColor();
+        }
+        else if (sub == "2")
+        {
+            Console.WriteLine("Thuc hien facade.GoToSleep...");
+            facade.GoToSleep();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Facade da dieu phoi tat quat, khoa cua, bat den va thong bao muc sang ban dem.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("Lua chon thao tac khong hop le.");
+        }
+    }
+
+    private static void TestScenarioT1()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("--- KIEM THU T1: TAO LIGHT FAN DOOR BANG FACTORY ---");
+        Console.ResetColor();
+
+        Console.Write("Nhap ten cho den: ");
+        string? lightName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(lightName)) lightName = "Living room light";
+
+        Console.Write("Nhap ten cho quat: ");
+        string? fanName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(fanName)) fanName = "Living room fan";
+
+        Console.Write("Nhap ten cho cua: ");
+        string? doorName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(doorName)) doorName = "Main door";
+
+        var light = DeviceFactory.Create("light", lightName);
+        var fan = DeviceFactory.Create("fan", fanName);
+        var door = DeviceFactory.Create("door", doorName);
+
+        bool ok = (light is SmartLight) && (fan is SmartFan) && (door is SmartDoor);
+
+        if (ok)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Ket qua T1: Thanh cong vi Factory tra ve dung cac kieu doi tuong SmartLight, SmartFan, SmartDoor.");
+            Console.ResetColor();
+            light.TurnOn();
+            fan.TurnOff();
+            if (door is ILockable lockable)
+            {
+                lockable.Lock();
+            }
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ket qua T1: Chua dung kieu doi tuong.");
+            Console.ResetColor();
+        }
+    }
+
+    private static void TestScenarioT2()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("--- KIEM THU T2: TAO THIET BI CHUA HO TRO PHAT SINH ARGUMENTEXCEPTION ---");
+        Console.ResetColor();
+
+        Console.Write("Nhap loai thiet bi chua ho tro muon thu nghiem vi du camera: ");
+        string? unType = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(unType)) unType = "camera";
+
+        Console.WriteLine("Goi DeviceFactory.Create voi loai " + unType + "...");
+
+        try
+        {
+            var dev = DeviceFactory.Create(unType, "Security device");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ket qua T2: Khong mong doi vi da tao thanh cong " + dev.GetType().Name);
+            Console.ResetColor();
+        }
+        catch (ArgumentException ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Ket qua T2: Thanh cong vi he thong da phat sinh dung ArgumentException nhu yeu cau.");
+            Console.WriteLine("Noi dung ngoai le: " + ex.Message);
+            Console.ResetColor();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ngoai le sai loai: " + ex.Message);
+            Console.ResetColor();
+        }
+    }
+
+    private static void TestScenarioT3()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("--- KIEM THU T3: LAY HAI THE HIEN HOMECONFIGURATION DUY NHAT ---");
+        Console.ResetColor();
+
+        Console.WriteLine("Thuc hien lay c1 = HomeConfiguration.Instance");
+        var c1 = HomeConfiguration.Instance;
+
+        Console.WriteLine("Thuc hien lay c2 = HomeConfiguration.Instance");
+        var c2 = HomeConfiguration.Instance;
+
+        bool same = ReferenceEquals(c1, c2);
+
+        if (same)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Ket qua T3: Thanh cong vi ReferenceEquals giua c1 va c2 la dung.");
+            Console.WriteLine("Ca hai bien cung tham chieu den mot the hien duy nhat.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ket qua T3: That bai vi ReferenceEquals tra ve false.");
+            Console.ResetColor();
+        }
+    }
+
+    private static void TestScenarioT4()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("--- KIEM THU T4: KICH BAN DI LAM GOTOWORK ---");
+        Console.ResetColor();
+
+        var light = new SmartLight("Den phong khach");
+        var fan = new SmartFan("Quat thong gio");
+        var door = new SmartDoor("Cua chinh");
 
         light.TurnOn();
         fan.TurnOn();
         door.Unlock();
 
-        Console.WriteLine("\nTrang thai cac thiet bi truoc khi di lam:");
+        Console.WriteLine("Trang thai truoc khi di lam:");
         Console.WriteLine("Den: Dang bat");
         Console.WriteLine("Quat: Dang bat");
         Console.WriteLine("Cua: Chua khoa");
@@ -221,7 +372,7 @@ class Program
         Console.WriteLine("\nThuc hien goi: facade.GoToWork();");
         facade.GoToWork();
 
-        Console.WriteLine("\nTrang thai cac thiet bi sau khi goi GoToWork:");
+        Console.WriteLine("\nTrang thai sau khi di lam:");
         Console.WriteLine("Den: " + (light.IsOn ? "Dang bat" : "Dang tat"));
         Console.WriteLine("Quat: " + (fan.IsOn ? "Dang bat" : "Dang tat"));
         Console.WriteLine("Cua: " + (door.IsLocked ? "Da khoa" : "Chua khoa"));
@@ -229,7 +380,7 @@ class Program
         if (!light.IsOn && !fan.IsOn && door.IsLocked)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Ket qua T4: Thanh cong vi den tat, quat tat va cua da duoc khoa an toan.");
+            Console.WriteLine("Ket qua T4: Thanh cong vi den tat, quat tat, cua da khoa.");
             Console.ResetColor();
         }
         else
@@ -240,33 +391,21 @@ class Program
         }
     }
 
-    private static void InteractiveGoToSleepTest()
+    private static void TestScenarioT5()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("--- KIEM TRA FACADE KICH BAN DI NGU GOTOSLEEP T5 ---");
+        Console.WriteLine("--- KIEM THU T5: KICH BAN DI NGU GOTOSLEEP ---");
         Console.ResetColor();
 
-        Console.Write("Nhap ten den phong ngu hoac nhan Enter de dung mac dinh: ");
-        string? lightName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(lightName)) lightName = "Den phong ngu";
-
-        Console.Write("Nhap ten quat hoac nhan Enter de dung mac dinh: ");
-        string? fanName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(fanName)) fanName = "Quat phong ngu";
-
-        Console.Write("Nhap ten cua phong hoac nhan Enter de dung mac dinh: ");
-        string? doorName = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(doorName)) doorName = "Cua phong";
-
-        var light = new SmartLight(lightName);
-        var fan = new SmartFan(fanName);
-        var door = new SmartDoor(doorName);
+        var light = new SmartLight("Den phong ngu");
+        var fan = new SmartFan("Quat phong ngu");
+        var door = new SmartDoor("Cua phong");
 
         light.TurnOff();
         fan.TurnOn();
         door.Unlock();
 
-        Console.WriteLine("\nTrang thai cac thiet bi truoc khi di ngu:");
+        Console.WriteLine("Trang thai truoc khi di ngu:");
         Console.WriteLine("Den: Dang tat");
         Console.WriteLine("Quat: Dang bat");
         Console.WriteLine("Cua: Chua khoa");
@@ -275,7 +414,7 @@ class Program
         Console.WriteLine("\nThuc hien goi: facade.GoToSleep();");
         facade.GoToSleep();
 
-        Console.WriteLine("\nTrang thai cac thiet bi sau khi goi GoToSleep:");
+        Console.WriteLine("\nTrang thai sau khi di ngu:");
         Console.WriteLine("Quat: " + (fan.IsOn ? "Dang bat" : "Dang tat"));
         Console.WriteLine("Cua: " + (door.IsLocked ? "Da khoa" : "Chua khoa"));
         Console.WriteLine("Den: " + (light.IsOn ? "Dang bat" : "Dang tat"));
@@ -283,7 +422,7 @@ class Program
         if (!fan.IsOn && door.IsLocked && light.IsOn)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Ket qua T5: Thanh cong vi quat tat, cua da khoa va den da bat theo muc sang ban dem.");
+            Console.WriteLine("Ket qua T5: Thanh cong vi quat tat, cua da khoa, den bat va muc sang ban dem da hien thi.");
             Console.ResetColor();
         }
         else
@@ -294,25 +433,21 @@ class Program
         }
     }
 
-    private static void InteractiveT6Test()
+    private static void TestScenarioT6()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("--- KIEM TRA CAP NHAT CAU HINH VA CHUOI HOA THUONG T6 ---");
+        Console.WriteLine("--- KIEM THU T6: CAP NHAT CAU HINH VA CHUOI KY TU HOA THUONG ---");
         Console.ResetColor();
 
-        Console.Write("Nhap chuoi loai thiet bi co chua chu hoa hoac khoang trang vi du LiGhT hoac DoOr: ");
-        string typeInput = Console.ReadLine() ?? "  LiGhT  ";
-        if (string.IsNullOrWhiteSpace(typeInput)) typeInput = "  LiGhT  ";
-
-        Console.Write("Nhap ten thiet bi muon dat: ");
-        string nameInput = Console.ReadLine() ?? "Den hanh lang";
-        if (string.IsNullOrWhiteSpace(nameInput)) nameInput = "Den hanh lang";
+        Console.Write("Nhap chuoi loai thiet bi chua chu hoa va khoang trang vi du  LiGhT : ");
+        string? rawType = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(rawType)) rawType = "  LiGhT  ";
 
         try
         {
-            var testDevice = DeviceFactory.Create(typeInput, nameInput);
+            var dev = DeviceFactory.Create(rawType, "Thiet bi kiem tra");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Thanh cong: Factory xu ly chuoi tot va tao duoc thiet bi loai " + testDevice.GetType().Name);
+            Console.WriteLine("Thanh cong: Factory xu ly tot chuoi va tao thanh cong " + dev.GetType().Name);
             Console.ResetColor();
         }
         catch (Exception ex)
@@ -322,12 +457,12 @@ class Program
             Console.ResetColor();
         }
 
-        Console.WriteLine("\nNhap muc sang ban dem moi de kiem tra tinh dong bo cua Facade:");
+        Console.WriteLine("\nNhap muc sang ban dem moi de kiem tra tinh dong bo:");
         Console.Write("Nhap so tu 1 den 100: ");
-        if (int.TryParse(Console.ReadLine(), out int newLevel))
+        if (int.TryParse(Console.ReadLine(), out int lvl))
         {
-            HomeConfiguration.Instance.NightLightLevel = newLevel;
-            Console.WriteLine("Da cap nhat NightLightLevel trong Singleton thanh " + newLevel);
+            HomeConfiguration.Instance.NightLightLevel = lvl;
+            Console.WriteLine("Da cap nhat NightLightLevel trong Singleton thanh " + lvl);
         }
 
         var light = new SmartLight("Den kiem tra");
@@ -339,11 +474,11 @@ class Program
         facade.GoToSleep();
 
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Ket qua T6: Hoan thanh kiem tra tinh dong bo va linh hoat cua he thong.");
+        Console.WriteLine("Ket qua T6: Hoan thanh kiem tra tinh dong bo va xu ly chuoi linh hoat.");
         Console.ResetColor();
     }
 
-    private static void InteractiveIndividualControl()
+    private static void TestIndividualControl()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("--- DIEU KHIEN RIENG LE TUNG THIET BI ---");
