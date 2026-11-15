@@ -7,17 +7,17 @@
 
 namespace SmartHomeMini;
 
-/// <summary>
-/// Lưu trữ cấu hình toàn cục của ngôi nhà thông minh.
-/// </summary>
 public sealed class HomeConfiguration
 {
+    private static readonly Lazy<HomeConfiguration> lazy =
+        new(() => new HomeConfiguration());
+
+    public static HomeConfiguration Instance => lazy.Value;
+
     public string HomeName { get; set; } = "My Home";
     public int NightLightLevel { get; set; } = 30;
 
-    public HomeConfiguration()
+    private HomeConfiguration()
     {
     }
-
-    public static HomeConfiguration Instance => new HomeConfiguration();
 }
