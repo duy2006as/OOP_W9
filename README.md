@@ -122,20 +122,20 @@ classDiagram
 - **Vị trí sử dụng:** Lớp `HomeConfiguration.cs`, thông qua thuộc tính tĩnh `HomeConfiguration.Instance`.
 - **Lợi ích đạt được:**
   - Đảm bảo ứng dụng chỉ có duy nhất **một đối tượng cấu hình** trong suốt vòng đời chạy.
-  - Cung cấp điểm truy cập toàn cục nhất quán cho mọi thành phần (Facade, Client,...) truy xuất các thông số như `HomeName`, `NightLightLevel`.
+  - Cung cấp điểm truy cập toàn cục nhất quán cho mọi thành phần Facade, Client,... truy xuất các thông số như `HomeName`, `NightLightLevel`.
 
 ### 3.3. Facade Pattern
 - **Vị trí sử dụng:** Lớp `SmartHomeFacade.cs`, thông qua 2 phương thức điều phối mức cao `GoToWork()` và `GoToSleep()`.
 - **Lợi ích đạt được:**
-  - Gom các thao tác điều khiển phức tạp trên nhiều thiết bị rời rạc (tắt quạt, tắt đèn, khóa cửa, đọc cấu hình sáng) vào một lệnh gọi duy nhất.
-  - Giảm sự phụ thuộc (loose coupling) cho client. Khi quy trình bên trong thay đổi, code client không bị xáo trộn.
+  - Gom các thao tác điều khiển phức tạp trên nhiều thiết bị rời rạc như tắt quạt, tắt đèn, khóa cửa, đọc cấu hình sáng vào một lệnh gọi duy nhất.
+  - Giảm sự phụ thuộc cho client. Khi quy trình bên trong thay đổi, code client không bị xáo trộn.
 
 ---
 
 ## 4. Một số hạn chế của thiết kế
 
 1. **Vi phạm nguyên lý Open/Closed Principle (OCP) ở Factory:**
-   - Trong `DeviceFactory`, việc lựa chọn thiết bị sử dụng cấu trúc `switch-case` theo chuỗi `string`. Khi cần mở rộng thêm thiết bị mới (ví dụ `SmartCamera`), ta bắt buộc phải chỉnh sửa mã nguồn của lớp `DeviceFactory`.
+   - Trong `DeviceFactory`, việc lựa chọn thiết bị sử dụng cấu trúc `switch-case` theo chuỗi `string`. Khi cần mở rộng thêm thiết bị mới ví dụ `SmartCamera`, ta bắt buộc phải chỉnh sửa mã nguồn của lớp `DeviceFactory`.
 2. **Khó khăn trong Unit Testing do Singleton:**
    - `HomeConfiguration.Instance` lưu trữ trạng thái toàn cục (global state) và tồn tại suốt vòng đời ứng dụng. Điều này khiến các ca kiểm thử phụ thuộc lẫn nhau, khó chạy song song và khó mock dữ liệu kiểm thử.
 3. **Độ cứng nhắc của Facade:**
@@ -164,18 +164,18 @@ classDiagram
 ### Câu 2: Singleton bảo đảm điều gì, nhưng tạo ra rủi ro nào?
 > **Trả lời:**
 > - **Bảo đảm:** Đảm bảo duy nhất một thể hiện của lớp tồn tại trong toàn bộ ứng dụng và cung cấp một điểm truy cập toàn cục tới thể hiện đó.
-> - **Rủi ro:** Tạo ra biến toàn cục (global state), làm tăng độ ghép nối ẩn, gây khó khăn cho Unit Test (khó reset trạng thái giữa các bài test) và có nguy cơ lỗi đa luồng (concurrency) nếu không xử lý thread-safe.
+> - **Rủi ro:** Tạo ra biến toàn cục, làm tăng độ ghép nối ẩn, gây khó khăn cho Unit Test khó reset trạng thái giữa các bài test và có nguy cơ lỗi đa luồng nếu không xử lý thread-safe.
 
 ### Câu 3: Facade khác Factory ở mục đích chính như thế nào?
 > **Trả lời:**
-> - **Factory** là *Creational Pattern* (mẫu khởi tạo): Mục đích chính là đóng gói và tách rời **việc tạo đối tượng**.
-> - **Facade** là *Structural Pattern* (mẫu cấu trúc): Mục đích chính là cung cấp **giao diện cấp cao đơn giản hóa** để điều phối và che giấu sự phức tạp của một hệ thống con gồm nhiều đối tượng tương tác với nhau.
+> - **Factory** là *Creational Pattern* : Mục đích chính là đóng gói và tách rời **việc tạo đối tượng**.
+> - **Facade** là *Structural Pattern* : Mục đích chính là cung cấp **giao diện cấp cao đơn giản hóa** để điều phối và che giấu sự phức tạp của một hệ thống con gồm nhiều đối tượng tương tác với nhau.
 
 ### Câu 4: Nếu bỏ SmartHomeFacade, client sẽ phải biết thêm những chi tiết nào?
 > **Trả lời:** Client sẽ phải:
 > 1. Trực tiếp nắm giữ tham chiếu đến từng thiết bị cụ thể (`IDevice`, `ILockable`).
-> 2. Tự ghi nhớ và quản lý đúng trình tự các bước thực hiện (ví dụ: khi đi làm phải tắt thiết bị nào trước, khóa cửa ở bước nào).
+> 2. Tự ghi nhớ và quản lý đúng trình tự các bước thực hiện ví dụ: khi đi làm phải tắt thiết bị nào trước, khóa cửa ở bước nào.
 > 3. Tự truy cập vào `HomeConfiguration` để đọc thông số cấu hình và áp dụng cho các thiết bị.
-> -> Dẫn đến code client bị phình to, lặp lại và phụ thuộc chặt chẽ (tight coupling) vào hệ thống con.
+> -> Dẫn đến code client bị phình to, lặp lại và phụ thuộc chặt chẽ vào hệ thống con.
 
 
