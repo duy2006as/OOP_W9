@@ -7,10 +7,6 @@
 
 namespace SmartHomeMini;
 
-/// <summary>
-/// SmartHomeFacade cung cấp giao diện cấp cao để thực hiện
-/// các kịch bản phối hợp nhiều thiết bị (GoToWork, GoToSleep).
-/// </summary>
 public sealed class SmartHomeFacade
 {
     private readonly IDevice light;
@@ -26,7 +22,7 @@ public sealed class SmartHomeFacade
 
     public void GoToWork()
     {
-        light.TurnOn(); 
+        light.TurnOff();
         fan.TurnOff();
         door.Lock();
     }
@@ -34,8 +30,10 @@ public sealed class SmartHomeFacade
     public void GoToSleep()
     {
         fan.TurnOff();
+        door.Lock();
         light.TurnOn();
-        int level = 50; 
+
+        int level = HomeConfiguration.Instance.NightLightLevel;
         Console.WriteLine($"Night light level: {level}%");
     }
 }
